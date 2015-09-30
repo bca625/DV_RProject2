@@ -1,0 +1,22 @@
+CREATE TABLE HospitalPayments (
+-- Change table_name to the table name you want.
+ Hospital_name varchar2(4000),
+ Address varchar2(4000),
+ City varchar2(4000),
+ State varchar2(4000),
+ County_name varchar2(4000),
+ Measure_name varchar2(4000),
+ Measure_ID varchar2(4000),
+ Category varchar2(4000),
+ Denominator varchar2(4000),
+ Measure_start_date varchar2(4000),
+ Measure_End_Date varchar2(4000),
+ Location varchar2(4000),
+ Provider_ID number(38,4),
+ ZIP_Code number(38,4),
+ Phone_number number(38,4),
+ Payment number(38,4),
+ Lower_estimate number(38,4),
+ Higher_estimate number(38,4),
+ Overpaid number(38,4)
+ );
