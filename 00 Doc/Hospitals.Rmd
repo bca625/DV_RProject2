@@ -44,7 +44,7 @@ ggplot(hospitals, aes(x=MEASURE_NAME, y=PAYMENT, fill=MEASURE_NAME)) + geom_boxp
 
 
 
-Using a little data wrangling and the "group_by" function we can see the states with the most patients.
+Using a little data wrangling and the "group_by" and "summarise" function we can see the states with the most patients.
 ```{r, warning=FALSE, message=FALSE}
 moop <- hospitals %>% group_by(STATE) %>% summarise(n = n()) %>% arrange(desc(n)) %>% tbl_df
 

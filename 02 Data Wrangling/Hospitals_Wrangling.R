@@ -4,8 +4,7 @@ require("jsonlite")
 require("RCurl")
 require("reshape2")
 require("ggplot2")
-require("ggmap")
-require("ggthemes")
+
 
 hospitals3 <- data.frame(fromJSON(getURL(URLencode('129.152.144.84:5001/rest/native/?query="select * from hospitalpayments"'),httpheader=c(DB='jdbc:oracle:thin:@129.152.144.84:1521/PDBF15DV.usuniversi01134.oraclecloud.internal', USER='cs329e_ba7433', PASS='orcl_ba7433', MODE='native_mode', MODEL='model', returnDimensions = 'False', returnFor = 'JSON'), verbose = TRUE), ))
 
@@ -20,7 +19,6 @@ View(hospitals)
 
 
 moop <- hospitals %>% group_by(STATE) %>% summarise(n = n()) %>% arrange(desc(n)) %>% tbl_df
-
 
 
 # select
