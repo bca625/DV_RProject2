@@ -108,3 +108,5 @@ We plot how much the patient paid against how far over the lower estimate was an
 ```{r, warning=FALSE, message=FALSE }
 source("../02 Data Wrangling/Plot5.R", echo=TRUE)
 ```
+
+It's immediately apparent that an overwhelming majority of the patients who overpaid were being treated for pneumonia. Only one of the patients was a heart attack patient.

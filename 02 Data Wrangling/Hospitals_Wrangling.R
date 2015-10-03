@@ -22,6 +22,7 @@ View(hospitals)
 moop <- hospitals %>% group_by(STATE) %>% summarise(n = n()) %>% arrange(desc(n)) %>% tbl_df
 
 
+
 # select
 Texas <- hospitals %>% select(CITY, STATE, PAYMENT, MEASURE_NAME) %>% filter(STATE == "TX") %>% tbl_df
 
