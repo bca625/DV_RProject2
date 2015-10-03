@@ -110,3 +110,5 @@ source("../02 Data Wrangling/Plot5.R", echo=TRUE)
 ```
 
 It's immediately apparent that an overwhelming majority of the patients who overpaid were being treated for pneumonia. Only one of the patients was a heart attack patient.
+
+Through the various data wrangling sets we were able to visualize the cost of heart attack and pneumonia treatments throughout the United States. Seeing the high costs of healthcare in the US and the rate at which patients overpay is astonishing, especially considering our neighbors in Canada whose health care is delivered through a publicly funded system.
