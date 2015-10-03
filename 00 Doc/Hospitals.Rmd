@@ -1,0 +1,110 @@
+---
+  output: html_document
+---
+  Data Visualization Project 2: Heart Attack and Pneumonia Patient Analysis
+===
+  **Bryan Amaefule, Kevin Lee, Shannon Lu**
+  
+  
+The data we selected for our project shows various information about heart attack and pneumonia patients around the United States. In our project we analyze the frequency and distribution of the payments made by patients with respect to their loaction and disease that they are being treated for.
+
+In order to carry out this analysis in R, you will need to require a few functions
+```{r, warning=FALSE, message=FALSE}
+require("tidyr")
+require("dplyr")
+require("jsonlite")
+require("RCurl")
+require("reshape2")
+require("ggplot2")
+```
+  
+
+First, we load the dataset into R and give you an peak at how the dataset is sturctured
+```{r, warning=FALSE, message=FALSE}
+hospitals <- data.frame(fromJSON(getURL(URLencode('129.152.144.84:5001/rest/native/?query="select * from hospitalpayments"'),httpheader=c(DB='jdbc:oracle:thin:@129.152.144.84:1521/PDBF15DV.usuniversi01134.oraclecloud.internal', USER='cs329e_ba7433', PASS='orcl_ba7433', MODE='native_mode', MODEL='model', returnDimensions = 'False', returnFor = 'JSON'), verbose = TRUE), ))
+
+tbl_df(hospitals)
+head(hospitals)
+```
+
+The first plot we show is an overview of the hospital payment distribution based on the disease being treated.
+```{r, warning=FALSE, message=FALSE }
+source("../02 Data Wrangling/Plot1.R", echo=TRUE)
+```
+
+The plot shows the disparity between the general cost of treatment for heart attack patients and that of pneumonia patients.
+
+A box plot allows us to visualize that disparity with repect to the quartiles of payment
+```{r, warning=FALSE, message=FALSE}
+ggplot(hospitals, aes(x=MEASURE_NAME, y=PAYMENT, fill=MEASURE_NAME)) + geom_boxplot() + scale_x_discrete(breaks=NULL) + labs(x=NULL)
+```
+
+
+
+
+
+
+Using a little data wrangling and the "group_by" function we can see the states with the most patients.
+```{r, warning=FALSE, message=FALSE}
+moop <- hospitals %>% group_by(STATE) %>% summarise(n = n()) %>% arrange(desc(n)) %>% tbl_df
+
+head(moop)
+```
+
+
+
+
+
+To get a more "close-to-home" view of things, we use data wrangling to select only the information from patients treated in Texas hospitals. We use the following data wrangling code to select the data we need from only the patients treated in Texas and put into its own data frame, called "Texas": 
+```{r, warning=FALSE, message=FALSE}
+Texas <- hospitals %>% select(CITY, STATE, PAYMENT, MEASURE_NAME) %>% filter(STATE == "TX") %>% tbl_df
+```
+
+Plotting the new data gives:
+```{r, warning=FALSE, message=FALSE }
+source("../02 Data Wrangling/Plot2.R", echo=TRUE)
+```
+
+We can see that not much changes with the distribution of heart attack and pneumonia payments in texas when compared to that of the entire United States.
+
+
+
+
+
+
+With a little more data wrangling we can visualize only the heart attack and pneumonia patients from the three biggest cities in Texas: Houston, Dallas, and San Antonio. 
+```{r, warning=FALSE, message=FALSE}
+HSD <- hospitals %>% select(CITY, STATE, PAYMENT, MEASURE_NAME) %>% filter(STATE == "TX", CITY %in% c("HOUSTON", "SAN ANTONIO", "DALLAS" )) 
+```
+
+
+```{r, warning=FALSE, message=FALSE }
+source("../02 Data Wrangling/Plot3.R", echo=TRUE)
+```
+
+We see that the highest hospital payment in Texas was from a heart attack patient in Houston who paid nearly $30,000 dollars for treatment.
+
+
+
+
+
+
+To get a better under standing of the disparity between hospital payments for pneumonia and those for heart attack we use a density plot with a semi-transparent fill.
+```{r, warning=FALSE, message=FALSE}
+ggplot(HSD, aes(x=PAYMENT, fill=MEASURE_NAME)) + geom_density(alpha=.3)
+```
+
+
+
+
+
+
+Using the "mutate()" function in R, we created another column in our data set that shows the amount overpaid by each patient (amount paid - Lower estimated cost of treatment). What we're really interested in are the most egregious cases of overpayment, so we use the "cume_dist()" function and a filter to only selct for the top 10% of patients who overpaid for their treatment.
+```{r,  warning=FALSE, message=FALSE}
+overpaid <- hospitals %>% select(HOSPITAL_NAME, STATE, PAYMENT,LOWER_ESTIMATE, LOCATION, MEASURE_NAME) %>% mutate(Payment_percent = cume_dist(PAYMENT),Overpaid_amt = PAYMENT - LOWER_ESTIMATE) %>% filter(Payment_percent <= 0.1)
+```
+
+We plot how much the patient paid against how far over the lower estimate was and we use the disease the patient had in the legend.
+```{r, warning=FALSE, message=FALSE }
+source("../02 Data Wrangling/Plot5.R", echo=TRUE)
+```

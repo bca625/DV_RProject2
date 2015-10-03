@@ -9,7 +9,7 @@ names(hospitals) <- gsub("\\.+", "_", names(hospitals))
 
 str(hospitals) # Uncomment this and  run just the lines to here to get column types to use for getting the list of measures.
 
-measures <- c("Provider_ID", "ZIP_Code", "Phone_number", "Payment", "Lower_estimate", "Higher_estimate", "Overpaid")
+measures <- c("Provider_ID", "ZIP_Code", "Phone_number", "Payment", "Lower_estimate", "Higher_estimate")
 #measures <- NA # Do this if there are no measures.
 
 # Get rid of special characters in each column.
